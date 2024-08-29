@@ -1,0 +1,30 @@
+##########################################################################
+
+name: ut-cs4300-grade
+on: [push]
+jobs:
+
+##########################################################################
+
+  pull-code:
+    name: Pull source code
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+        
+##########################################################################
+
+  grade:
+    name: Grade
+    runs-on: self-hosted
+    needs: [pull-code]
+    continue-on-error: false
+    outputs:
+      output1: ${{ steps.step1.outcome }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Grade
+        id: step1
+        run: cs4300-grader
+        
+##########################################################################
