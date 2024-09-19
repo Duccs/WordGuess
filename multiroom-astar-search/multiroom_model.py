@@ -2,6 +2,7 @@
 import minigrid.core.constants as cons
 import numpy as np
 import math
+import sys
 
 ACTION_TURN_LEFT = 0
 ACTION_TURN_RIGHT = 1
@@ -14,12 +15,14 @@ class MultiRoomModel:
     def __init__(self):
         self.state = None
         self.debug_count = 0
+        self.last_opened_door = 0, 0, 0
         self.reset()
         return
 
     def reset(self):
         self.state = None
         self.debug_count = 0
+        self.last_opened_door = 0, 0, 0
         self.time = 0
         return
 
@@ -95,13 +98,34 @@ class MultiRoomModel:
     
     # Estimated cost of reaching a goal state from state s.
     def HEURISTIC(self, state):
+        penalty = 0
+
         # Calculate the Manhattan distance between the agent's current position and the goal
-        agent_x, agent_y, _, _ = state
+        agent_x, agent_y, direction, _ = state
         goal_x, goal_y = self.find_goal_position()
         distance = abs(agent_x - goal_x) + abs(agent_y - goal_y)
 
+        # Add distance to penalty
+        penalty += distance
+
+        # Calculate the Manhattan distance between the agent's current position and the nearest closed door
+        # distance = self.find_closest_door(state)
+        # if distance is not sys.maxsize:
+        #     print(distance)
+        #     # Add distance of closest closed door to penalty
+        #     penalty += distance
+
+        # Add number of doors open to penalty
+        penalty += len(state[3]) * 100
+
+        # Do not backtrace after opening a door
+        if self.last_opened_door != (0, 0, 0):
+            if agent_x == self.last_opened_door[0] and agent_y == self.last_opened_door[1] and direction != self.last_opened_door[2]:
+                penalty += 10000
+
+
         self.debug_count += 1
-        return distance
+        return penalty
 
     # Find the position of the agent in the image
     # State passed must be the environment observation
@@ -129,6 +153,18 @@ class MultiRoomModel:
     
     def find_goal_position(self):
         return self.find_object_position(cons.OBJECT_TO_IDX['goal'], cons.COLOR_TO_IDX['green'], 0)
+    
+    def find_closest_door(self, state):
+        image = self.state['image']
+        agent_x, agent_y, _, _ = state
+
+        distance = sys.maxsize
+        for x in range(image.shape[0]):
+            for y in range(image.shape[1]):
+                if image[x, y, 0] == cons.OBJECT_TO_IDX['door']:
+                    if distance > abs(x - agent_x) + abs(y - agent_y):
+                        distance = abs(x - agent_x) + abs(y - agent_y)
+        return distance
 
     # Return the 3 values of the cell facing the agent
     # (Type, Color, State)

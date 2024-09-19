@@ -4,10 +4,7 @@ from __future__ import annotations
 
 import gymnasium as gym
 import my_minigrids
-from gymnasium import Env
-from minigrid.core.actions import Actions
-from minigrid.minigrid_env import MiniGridEnv
-from minigrid.wrappers import ImgObsWrapper, RGBImgPartialObsWrapper
+
 from minigrid.wrappers import FullyObsWrapper
 
 import argparse
@@ -62,7 +59,7 @@ def parse_args(argv):
         "-c",
         type=int,
         help="number of episodes to run",
-        default=1
+        default=100
     )
     parser.add_argument(
         "--max-episode-steps",
@@ -106,7 +103,7 @@ def parse_args(argv):
         type=str,
         help="gym environment to load",
         choices=gym.envs.registry.keys(),
-        default="MiniGrid-MultiRoom-N6-S6-v0",
+        default="MiniGrid-MultiRoom-N11-S9-v0",
     )
     parser.add_argument(
         "--tile-size", type=int, help="size at which to render tiles", default=32

@@ -66,6 +66,10 @@ class Agent1:
                 return actions_taken[::-1]
 
             for action in self.model.ACTIONS(s):
+                if action == 5:
+                    self.model.last_opened_door = s[0], s[1], s[2]
+                    # Bold Move
+                    Q.queue.clear()
                 s1 = self.model.RESULT(s, action)
                 if s1 not in visited:
                     n1 = self.Node(s1, node, action, depth + 1, cost + self.model.STEP_COST(s, action, s1), self.model.HEURISTIC(s1))
