@@ -13,13 +13,9 @@ The guessing system uses letter placement and feedback to advance toward the sol
 Description
 -----------
 
-The game starts with a feedback reading of "| e | e | e | e | e" indicating that no guess has been made yet. player at location [3, 0] of the 4x12 grid world with the goal located at [3, 11]. If the player reaches the goal the episode ends.
+The game starts with a feedback reading of "| e | e | e | e | e |" indicating that no guess has been made yet. The player has six attempts at guessing the hidden word, and using the feedback from each guess to deduce the answer. 
 
-A cliff runs along [3, 1..10]. If the player moves to a cliff location it returns to the start location.
-
-The player makes moves until they reach the goal.
-
-The cliff can be chosen to be slippery (disabled by default) so the player may move =
+Feedback can only be obtained by submitting valid five-letter words as guesses, with each guess revealing which letters are correct "C", present but misplaced (W), or absent (A)
 
 Action Space
 ------------
