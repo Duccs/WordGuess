@@ -1,0 +1,11 @@
+README.md
+setup.py
+wordguess/__init__.py
+wordguess.egg-info/PKG-INFO
+wordguess.egg-info/SOURCES.txt
+wordguess.egg-info/dependency_links.txt
+wordguess.egg-info/requires.txt
+wordguess.egg-info/top_level.txt
+wordguess/envs/__init__.py
+wordguess/envs/wordguess_env.py
+wordguess/envs/wordguess_model.py
